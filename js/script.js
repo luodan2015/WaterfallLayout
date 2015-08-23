@@ -3,6 +3,26 @@
  */
 window.onload = function () {
     waterfall('main','box');
+
+    var dataInt = {"data":[{"src":"0.jpg"},{"src":"1.jpg"},{"src":"2.jpg"},{"src":"3.jpg"},{"src":"4.jpg"}]};
+    window.onscroll = function () {
+        if (checkScrollSlide) {
+            var oParent = document.getElementById('main');
+            //将数据块渲染到当前页面的尾部
+            for (var i = 0; i < dataInt.data.length; i++) {
+                var oBox = document.createElement('div');
+                oBox.className = 'box';
+                oParent.appendChild(oBox);
+                var oPic = document.createElement('div');
+                oPic.className = 'pic';
+                oBox.appendChild(oPic);
+                var oImg = document.createElement('img');
+                oImg.src = 'img/' + dataInt.data[i].src;
+                oPic.appendChild(oImg);
+            }
+            waterfall('main','box');
+        }
+    }
 };
 
 function waterfall (parent, box) {
@@ -57,4 +77,16 @@ function getMinhIndex (arr, val) {
             return i;
         }
     }
+}
+
+//检测是否具备了滚动加载数据的条件
+function checkScrollSlide() {
+    var oParent = document.getElementById('main');
+    var oBoxes = getByClass(oParent, 'box');
+    var lastBoxH = oBoxes[oBoxes.length-1].offsetTop + Math.floor(oBoxes[oBoxes.length-1].offsetHeight/2);
+    //混杂模式||标准模式
+    var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+    var height = document.body.clientHeight || document.documentElement.clientHeight;
+
+    return (lastBoxH<scrollTop+height)?true:false;
 }
